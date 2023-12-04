@@ -1,0 +1,113 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import statsmodels
+import matplotlib.pyplot as plt
+import math
+
+
+## Read in Data
+flight = pd.read_csv("flight.csv")
+print(flight.head(15))
+
+## Task 1
+#print(flight.coach_price)
+print("Avg flight cost (coach class): ")
+print("$" + str(round(np.mean(flight.coach_price),2)))
+print('\n')
+print("Lowest flight cost (coach class): ")
+print("$" + str(round(np.min(flight.coach_price),2)))
+print('\n')
+print("Highest flight cost (coach class): ")
+print("$" + str(round(np.max(flight.coach_price),2)))
+print('\n')
+
+## Task 2 Coach price for an 8-hour flight
+print("Avg 8-hour flight cost (coach class): ")
+print("$" + str(round(np.mean(flight.coach_price[flight.hours == 8]),2)))
+print('\n')
+print("Lowest 8-hour flight (coach class): ")
+print("$" + str(round(np.min(flight.coach_price[flight.hours == 8]),2)))
+print('\n')
+print("Highest 8-hour flight (coach class): ")
+print("$" + str(round(np.max(flight.coach_price[flight.hours == 8]),2)))
+
+avg_pass = np.mean(flight.passengers)
+print('\n')
+print("Avg number of passengers per flight")
+print(float(round(avg_pass,2)))
+
+sns.histplot(flight.coach_price[flight.hours == 8])
+plt.title("Price of 8 hour flights")
+ 
+plt.show()
+plt.clf()
+
+
+## Task 3 Flight delays
+print('\n')
+print("Avg time of flight delays: ")
+print(str(round(np.mean(flight.delay),2)) + " minutes")
+print('\n')
+
+sns.histplot(flight.delay[flight.delay <=500])
+plt.title("Frequency of flight delays")
+plt.xlabel("Delay time (in minutes)")
+
+plt.show()
+plt.clf()
+
+
+## Task 4 Relationship between coach and first class.
+plt.hist(flight.coach_price, label= "Coach", edgecolor='yellow')
+plt.hist(flight.firstclass_price, label= "Firstclass", edgecolor='red')
+
+plt.title("Coach Price vs Firstclass Price")
+plt.xlabel("Prices in dollars")
+plt.ylabel("Number of Flights")
+plt.legend()
+plt.show()
+plt.clf()
+
+
+
+## Task 5
+# Inflight Meals
+sns.histplot(flight, x = "coach_price", hue = flight.inflight_meal, palette="tab10")
+plt.title("Coach Price vs Inflight Meal")
+plt.show()
+plt.clf()
+ 
+# Inflight Entertainment
+sns.histplot(flight, x = "coach_price", hue = flight.inflight_entertainment)
+plt.title("Coach Price vs Inflight Entertainment")
+plt.show()
+plt.clf()
+ 
+# Inflight WiFi
+sns.histplot(flight, x = "coach_price", hue = flight.inflight_wifi)
+plt.title("Coach Price vs Inflight Wifi")
+plt.show()
+plt.clf()
+
+## Task 6 Compare Passengers vs Length(hours) of flight
+sns.stripplot(data=flight, x='hours', y='passengers', jitter=True)
+
+
+plt.title("Passengers vs Flight Length")
+plt.ylabel("Number of Passengers")
+plt.xlabel("Length of Flight ( in hours )")
+plt.show()
+plt.clf()
+
+## Task 7 Compare prices of tickets on weekends vs weekdays
+sns.lmplot(x ='coach_price', y='firstclass_price', hue = 'weekend', data = flight, fit_reg= False)
+plt.title("Prices in Comparison to Weekend or Weekday Flights")
+plt.show()
+plt.clf()
+
+## Task 8 Compare Prices to Redeye Flights
+sns.lmplot(x ='coach_price', y='firstclass_price', hue = 'redeye', data = flight, fit_reg= False)
+plt.title("Prices in Comparison to Red Eye Flights")
+plt.show()
+plt.clf()
